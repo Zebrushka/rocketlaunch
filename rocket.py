@@ -14,9 +14,8 @@ def Vacuum_dV(motor_isp, wet_mass, dry_mass):
     from numpy import log
     #print(wet_mass, dry_mass, motor_isp)
     deltaV = 9.0665 * motor_isp * log(wet_mass / dry_mass)
-    print("Total delta-V is ")
-    print(deltaV)
-    print(" m/s \n\n")
+    print("Total delta-V is", deltaV, "m/s \n\n")
+
     #mF = 5300 / (STANDARD_GRAVITY * motor_isp)
     #    print("Burn time is %.2f s") % mF
     return deltaV
@@ -62,6 +61,15 @@ def Force_Gravity(mass_ship, altitude, MASS_BODY, RADIUS_BODY, STANDARD_GRAVITY_
     force_gravity = G * mass_ship * MASS_BODY / ((RADIUS_BODY + altitude)**2)
     return force_gravity
 
+def First_space_velocity(MASS_BODY, RADIUS_BODY):
+	"""The first space velocity, or circular velocity V1 - the velocity required to orbit 
+	the satellite in circular orbit around the Earth or another space object. 
+	If R - the orbit radius, and G - the gravitational constant, then V1 = (GM/R)1/2"""
+	G = 6.674 * 10**-11
+
+	first_velocity = ((G * MASS_BODY)/RADIUS_BODY)**0.5
+
+	return first_velocity
 
 def Thrust_ship(thrust, motor_isp, mass_flow):
     """Calculates thrust from the Rocket eqation: Thrust = Isp * g0 * massflow
@@ -305,7 +313,8 @@ def Apogee(velocity):
     return apogee
 
 
-def Main_simulation(thrust, motor_isp, mass_flow, dry_mass, wet_mass, reference_area, MASS_BODY, RADIUS_BODY, STANDARD_GRAVITY_BODY): # pragma: no cover
+def Main_simulation(thrust, motor_isp, mass_flow, dry_mass, wet_mass, reference_area, MASS_BODY, RADIUS_BODY, STANDARD_GRAVITY_BODY): 
+	# pragma: no cover
     """This function is the main simulation package. It calls each of the
     necessary functions to calculate the position of the rocket for the duration
     of the flight.
