@@ -61,15 +61,21 @@ def Force_Gravity(mass_ship, altitude, MASS_BODY, RADIUS_BODY, STANDARD_GRAVITY_
     force_gravity = G * mass_ship * MASS_BODY / ((RADIUS_BODY + altitude)**2)
     return force_gravity
 
-def First_space_velocity(MASS_BODY, RADIUS_BODY):
+def Large_orbit(MASS_BODY, STANDARD_GRAVITY_BODY, RADIUS_BODY, First_space_velocity):
 	"""The first space velocity, or circular velocity V1 - the velocity required to orbit 
 	the satellite in circular orbit around the Earth or another space object. 
-	If R - the orbit radius, and G - the gravitational constant, then V1 = (GM/R)1/2"""
+	If R - the orbit radius, and G - the gravitational constant, then V1 = (GM/R)1/2.
+
+    Returns:
+        altitude orbit in kilometrs (float).
+    """
 	G = 6.674 * 10**-11
 
 	first_velocity = ((G * MASS_BODY)/RADIUS_BODY)**0.5
 
-	return first_velocity
+    h = (((STANDARD_GRAVITY_BODY * RADIUS_BODY**2)/first_velocity**2) - RADIUS_BODY)/1000
+
+    return h
 
 def Thrust_ship(thrust, motor_isp, mass_flow):
     """Calculates thrust from the Rocket eqation: Thrust = Isp * g0 * massflow
@@ -381,7 +387,7 @@ def Main_simulation(thrust, motor_isp, mass_flow, dry_mass, wet_mass, reference_
         mass.append(mass_ship)
 
         force_gravity = Force_Gravity(mass_ship, altitude, MASS_BODY, RADIUS_BODY, STANDARD_GRAVITY_BODY)
-
+        
         density = Atmosphere_Density(altitude)
         dens_rho.append(density)
 
@@ -403,12 +409,13 @@ def Main_simulation(thrust, motor_isp, mass_flow, dry_mass, wet_mass, reference_
 
         altitude = Altitude(altitude, velocity, i)
         height.append(altitude)
-
+        
         #downrange = Position_downrange(downrange, velocity)
         #This here is the time calculations
         time = i * TIME_STEP
         time_passed.append(time)
         i += 1
+
 
     gravity_loss = dV - velocity
     # print ("Final velocity: ")
