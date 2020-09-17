@@ -61,6 +61,7 @@ def Force_Gravity(mass_ship, altitude, MASS_BODY, RADIUS_BODY, STANDARD_GRAVITY_
     force_gravity = G * mass_ship * MASS_BODY / ((RADIUS_BODY + altitude)**2)
     return force_gravity
 
+
 def Large_orbit(MASS_BODY, STANDARD_GRAVITY_BODY, RADIUS_BODY, First_space_velocity):
 	"""The first space velocity, or circular velocity V1 - the velocity required to orbit 
 	the satellite in circular orbit around the Earth or another space object. 
@@ -71,11 +72,12 @@ def Large_orbit(MASS_BODY, STANDARD_GRAVITY_BODY, RADIUS_BODY, First_space_veloc
     """
 	G = 6.674 * 10**-11
 
-	first_velocity = ((G * MASS_BODY)/RADIUS_BODY)**0.5
+    first_velocity = ((G * MASS_BODY)/RADIUS_BODY)**0.5
 
     h = (((STANDARD_GRAVITY_BODY * RADIUS_BODY**2)/first_velocity**2) - RADIUS_BODY)/1000
 
     return h
+
 
 def Thrust_ship(thrust, motor_isp, mass_flow):
     """Calculates thrust from the Rocket eqation: Thrust = Isp * g0 * massflow
@@ -513,6 +515,16 @@ def initialize_variables(): # pragma: no cover
     wet_mass = float(
         40000
     )  # Wet mass in kg
+
+    MASS_BODY =  float(
+        5.9726*10**24
+        )
+    RADIUS_BODY = float(
+        6371 * 10**3
+        )
+    STANDARD_GRAVITY_BODY = float(
+        9.780327
+        )
 
     reference_area = 3.14159 * 3**2  # This is the cross sectional profile of the rocket
     return dry_mass, wet_mass, mass_flow, thrust, motor_isp, reference_area
