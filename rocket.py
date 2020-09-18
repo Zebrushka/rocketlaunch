@@ -1,3 +1,5 @@
+import math
+
 def Vacuum_dV(motor_isp, wet_mass, dry_mass):
     """Calculates the total available vacuum-dv by the Tsiakovlsy rocket equation
 
@@ -62,21 +64,32 @@ def Force_Gravity(mass_ship, altitude, MASS_BODY, RADIUS_BODY, STANDARD_GRAVITY_
     return force_gravity
 
 
-def Large_orbit(MASS_BODY, STANDARD_GRAVITY_BODY, RADIUS_BODY, First_space_velocity):
-	"""The first space velocity, or circular velocity V1 - the velocity required to orbit 
-	the satellite in circular orbit around the Earth or another space object. 
-	If R - the orbit radius, and G - the gravitational constant, then V1 = (GM/R)1/2.
+def Near_orbit(MASS_BODY, STANDARD_GRAVITY_BODY, RADIUS_BODY):
+    """The first space velocity, or circular velocity V1 - the velocity required to orbit 
+    the satellite in circular orbit around the Earth or another space object. 
+    If R - the orbit radius, and G - the gravitational constant, then V1 = (GM/R)1/2.
 
     Returns:
         altitude orbit in kilometrs (float).
     """
-	G = 6.674 * 10**-11
-
+    G = 6.674 * 10**-11
     first_velocity = ((G * MASS_BODY)/RADIUS_BODY)**0.5
-
     h = (((STANDARD_GRAVITY_BODY * RADIUS_BODY**2)/first_velocity**2) - RADIUS_BODY)/1000
 
     return h
+
+
+def DeltaV_to_Near_orbit(gravitiPotationalBody = 3.986 * 10**5, RADIUS_BODY = 6371, Spaceship_orbit = 6571):
+    """This function calculate deltaV for launch from body ground to orbit
+
+    Returns:
+        DeltaV in M/S
+    """
+
+    DeltaVtoNearorbit = math.sqrt((gravitiPotationalBody / Spaceship_orbit) * (((2 * Spaceship_orbit) / RADIUS_BODY) - 1))*1000н
+
+    return (DeltaVtoNearorbit)
+
 
 
 def Thrust_ship(thrust, motor_isp, mass_flow):
@@ -534,4 +547,4 @@ def initialize_variables(): # pragma: no cover
 def run(): # pragma: no cover
 
     dry_mass, wet_mass, mass_flow, thrust, motor_isp, reference_area = initialize_variables()#(thrust, motor_isp, mass_flow, dry_mass, wet_mass)
-    Main_simulation(thrust, motor_isp, mass_flow, dry_mass, wet_mass, reference_area)
+    Main_simulation(thrust, motor_isp, mass_flow, dry_mass, wet_mass, reference_area, MASS_BODY, RADIUS_BODY, STANDARD_GRAVITY_BODY)
